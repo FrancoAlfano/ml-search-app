@@ -4,7 +4,7 @@ export default function HelloWorld() {
   const [message, setMessage] = useState('Loading...');
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/greet')
+    fetch('http://localhost:8080/api/greet')
       .then(response => response.text())
       .then(data => setMessage(data))
       .catch(error => console.error('Error fetching data:', error));
