@@ -18,22 +18,25 @@ router.get('/', async (req, res) => {
       price: {
         currency: item.currency_id,
         amount: item.price,
-        decimals: 0,
+        decimals: 10
       },
-      picture: item.thumbnail,
+      picture: item.thumbnail.replace('I.jpg', 'O.jpg'),
       condition: item.condition,
-      free_shipping: item.shipping.free_shipping,
+      free_shipping: item.shipping.free_shipping
     }));
 
-    const categories = response.data.filters.find(filter => filter.id === 'category')?.values[0].path_from_root.map(cat => cat.name) || [];
+    const categories =
+      response.data.filters
+        .find(filter => filter.id === 'category')
+        ?.values[0].path_from_root.map(cat => cat.name) || [];
 
     res.json({
       author: {
         name: 'Your Name',
-        lastname: 'Your Lastname',
+        lastname: 'Your Lastname'
       },
       categories,
-      items,
+      items
     });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred' });
@@ -46,7 +49,7 @@ router.get('/:id', async (req, res) => {
   try {
     const [itemResponse, descriptionResponse] = await Promise.all([
       axios.get(`${API_BASE_URL}/items/${id}`),
-      axios.get(`${API_BASE_URL}/items/${id}/description`),
+      axios.get(`${API_BASE_URL}/items/${id}/description`)
     ]);
 
     const item = itemResponse.data;
@@ -55,7 +58,7 @@ router.get('/:id', async (req, res) => {
     res.json({
       author: {
         name: 'Your Name',
-        lastname: 'Your Lastname',
+        lastname: 'Your Lastname'
       },
       item: {
         id: item.id,
@@ -63,14 +66,14 @@ router.get('/:id', async (req, res) => {
         price: {
           currency: item.currency_id,
           amount: item.price,
-          decimals: 0,
+          decimals: 0
         },
         picture: item.pictures[0].secure_url,
         condition: item.condition,
         free_shipping: item.shipping.free_shipping,
         sold_quantity: item.sold_quantity,
-        description: description.plain_text,
-      },
+        description: description.plain_text
+      }
     });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred' });

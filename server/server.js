@@ -6,18 +6,12 @@ const cors = require('cors');
 
 app.use(cors());
 
-app.get('/api/greet', (req, res) => {
-  res.send('Hello from server!');
-});
-
 app.use(express.json());
 
 app.use('/api/items', itemsRouter);
-
 
 app.listen(port, () => {
   console.log(`Listening on http://localhost:${port}`);
 });
 
-
-  module.exports = app;
+module.exports = app;

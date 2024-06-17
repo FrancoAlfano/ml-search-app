@@ -1,40 +1,55 @@
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import axios from 'axios';
+import Image from 'next/image';
 
-const ItemDetail = () => {
+const ProductDetail = () => {
+  const [product, setProduct] = useState(null);
   const router = useRouter();
   const { id } = router.query;
-  const [item, setItem] = useState(null);
 
   useEffect(() => {
-    if (!id) return;
-
-    const fetchItemDetails = async () => {
-      try {
-        const response = await fetch(`/api/items/${id}`);
-        const data = await response.json();
-        setItem(data.item);
-      } catch (error) {
-        console.error('Error fetching item details:', error);
-      }
-    };
-
-    fetchItemDetails();
+    if (id) {
+      axios.get(`/api/items/${id}`).then(response => {
+        setProduct(response.data.item);
+      });
+    }
   }, [id]);
 
-  if (!item) return <div>Loading...</div>;
+  if (!product) {
+    return (
+      <div>
+        <div>Loading...</div>;
+      </div>
+    );
+  }
 
   return (
     <div>
-      <h1>{item.title}</h1>
-      <img src={item.picture} alt={item.title} />
-      <p>{item.price.amount} {item.price.currency}</p>
-      <p>{item.condition}</p>
-      <p>{item.description}</p>
-      <p>Free Shipping: {item.free_shipping ? 'Yes' : 'No'}</p>
-      <p>Sold Quantity: {item.sold_quantity}</p>
+      <main className="p-4">
+        <h1 className="text-xl font-bold">{product.title}</h1>
+        <div className="flex">
+          <Image
+            src={product.picture}
+            alt={product.title}
+            width={680}
+            height={680}
+            quality={100}
+            className="object-cover mr-4"
+          />
+          <div>
+            <h2 className="text-2xl font-bold">{product.title}</h2>
+            <p className="text-xl">
+              {product.price.amount} {product.price.currency}
+            </p>
+            <p>{product.condition}</p>
+            <p>{product.description}</p>
+            <p>Envío Gratis: {product.free_shipping ? 'Sí' : 'No'}</p>
+          </div>
+        </div>
+      </main>
     </div>
   );
 };
 
-export default ItemDetail;
+export default ProductDetail;
