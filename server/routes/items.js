@@ -1,8 +1,10 @@
 const express = require('express');
 const axios = require('axios');
 const router = express.Router();
+require('dotenv').config();
 
-const API_BASE_URL = 'https://api.mercadolibre.com';
+const API_BASE_URL = process.env.API_BASE_URL;
+const ITEMS_SEARCH_PATH = process.env.ITEMS_SEARCH_PATH;
 
 router.get('/', async (req, res) => {
   const { q } = req.query;
@@ -11,7 +13,7 @@ router.get('/', async (req, res) => {
   }
 
   try {
-    const response = await axios.get(`${API_BASE_URL}/sites/MLA/search?q=${q}`);
+    const response = await axios.get(`${API_BASE_URL}${ITEMS_SEARCH_PATH}${q}`);
     const items = response.data.results.slice(0, 4).map(item => ({
       id: item.id,
       title: item.title,
@@ -22,7 +24,10 @@ router.get('/', async (req, res) => {
       },
       picture: item.thumbnail.replace('I.jpg', 'O.jpg'),
       condition: item.condition,
-      free_shipping: item.shipping.free_shipping
+      free_shipping: item.shipping.free_shipping,
+      location: item.location
+        ? `${item.location.city.name}, ${item.location.state.name}`
+        : ''
     }));
 
     const categories =
@@ -32,8 +37,8 @@ router.get('/', async (req, res) => {
 
     res.json({
       author: {
-        name: 'Your Name',
-        lastname: 'Your Lastname'
+        name: '',
+        lastname: ''
       },
       categories,
       items
@@ -57,8 +62,8 @@ router.get('/:id', async (req, res) => {
 
     res.json({
       author: {
-        name: 'Your Name',
-        lastname: 'Your Lastname'
+        name: '',
+        lastname: ''
       },
       item: {
         id: item.id,
