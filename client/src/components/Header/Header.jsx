@@ -7,7 +7,13 @@ const Header = () => {
   return (
     <header className={styles.header}>
       <Link href="/">
-        <Image src="/ml-icon.png" alt="Mercado Libre" width={50} height={35} />
+        <Image
+          className={styles.icon}
+          src="/ml-icon.png"
+          alt="Mercado Libre"
+          width={50}
+          height={35}
+        />
       </Link>
       <SearchBox />
     </header>
