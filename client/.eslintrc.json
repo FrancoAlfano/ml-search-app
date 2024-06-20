@@ -13,7 +13,7 @@
     "plugin:import/typescript",
     "plugin:prettier/recommended",
     "next/core-web-vitals",
-    "next/babel"
+    "next"
   ],
   "parserOptions": {
     "ecmaFeatures": {

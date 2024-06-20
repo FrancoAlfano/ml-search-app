@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import axios from 'axios';
-import Image from 'next/image';
+import { useRouter } from 'next/router';
+import ItemImage from '../../components/ItemImage/ItemImage';
+import { formatCurrency } from '../../utils/formatCurrency';
 
 const ProductDetail = () => {
   const [product, setProduct] = useState(null);
@@ -9,45 +10,39 @@ const ProductDetail = () => {
   const { id } = router.query;
 
   useEffect(() => {
-    if (id) {
-      axios.get(`/api/items/${id}`).then(response => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`/api/items/${id}`);
         setProduct(response.data.item);
-      });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (id) {
+      fetchProduct();
     }
   }, [id]);
 
   if (!product) {
-    return (
-      <div>
-        <div>Loading...</div>;
-      </div>
-    );
+    return <p>Loading...</p>;
   }
 
   return (
-    <div>
-      <main className="p-4">
-        <h1 className="text-xl font-bold">{product.title}</h1>
+    <div className="container mx-auto p-4">
+      <div className="bg-white p-4 rounded shadow">
         <div className="flex">
-          <Image
-            src={product.picture}
-            alt={product.title}
-            width={680}
-            height={680}
-            quality={100}
-            className="object-cover mr-4"
-          />
-          <div>
-            <h2 className="text-2xl font-bold">{product.title}</h2>
-            <p className="text-xl">
-              {product.price.amount} {product.price.currency}
+          <ItemImage src={product.picture} alt={product.title} size="large" />
+          <div className="ml-4">
+            <h1 className="text-2xl font-bold">{product.title}</h1>
+            <p className="text-lg">
+              {formatCurrency(product.price.amount, product.price.currency)}
             </p>
             <p>{product.condition}</p>
             <p>{product.description}</p>
-            <p>Envío Gratis: {product.free_shipping ? 'Sí' : 'No'}</p>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 };
