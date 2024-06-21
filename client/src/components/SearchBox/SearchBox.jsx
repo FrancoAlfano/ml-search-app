@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useState, forwardRef, useImperativeHandle } from 'react';
+import { useRouter } from 'next/navigation';
 import { FaSearch } from 'react-icons/fa';
 import styles from './searchbox.module.scss';
 
-const SearchBox = () => {
+const SearchBox = forwardRef((props, ref) => {
   const [query, setQuery] = useState('');
   const router = useRouter();
 
@@ -13,6 +13,12 @@ const SearchBox = () => {
       router.push(`/items?search=${query}`);
     }
   };
+
+  useImperativeHandle(ref, () => ({
+    clearSearch() {
+      setQuery('');
+    }
+  }));
 
   return (
     <form onSubmit={handleSearch} className={styles['search-form']}>
@@ -27,6 +33,7 @@ const SearchBox = () => {
       </button>
     </form>
   );
-};
+});
+
 
 export default SearchBox;
