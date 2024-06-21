@@ -1,8 +1,9 @@
-const express = require('express');
-const itemsRouter = require('./routes/items');
+import express from 'express';
+import cors from 'cors';
+import itemsRouter from './routes/items.js';
+
 const app = express();
 const port = 8080;
-const cors = require('cors');
 
 app.use(cors());
 
@@ -13,5 +14,3 @@ app.use('/api/items', itemsRouter);
 app.listen(port, () => {
   console.log(`Listening on http://localhost:${port}`);
 });
-
-module.exports = app;
