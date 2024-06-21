@@ -1,16 +1,17 @@
-const express = require('express');
-const axios = require('axios');
-const router = express.Router();
-require('dotenv').config();
+import express from 'express';
+import axios from 'axios';
+import validateQuery from '../middleware/validateQuery.js';
+import validateParam from '../middleware/validateParam.js';
+import dotenv from 'dotenv';
 
+dotenv.config();
+
+const router = express.Router();
 const API_BASE_URL = process.env.API_BASE_URL;
 const ITEMS_SEARCH_PATH = process.env.ITEMS_SEARCH_PATH;
 
-router.get('/', async (req, res) => {
+router.get('/', validateQuery, async (req, res) => {
   const { q } = req.query;
-  if (!q) {
-    return res.status(400).json({ error: 'Query parameter q is required' });
-  }
 
   try {
     const response = await axios.get(`${API_BASE_URL}${ITEMS_SEARCH_PATH}${q}`);
@@ -48,7 +49,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateParam, async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -85,4 +86,4 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
