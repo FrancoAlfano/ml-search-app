@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import ItemImage from '../../../components/ItemImage/ItemImage';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import Head from 'next/head';
-import '../../../styles/ProductDetail.scss';
+import '../../../styles/product-detail.scss';
 
 const ProductDetail = () => {
   const [product, setProduct] = useState(null);

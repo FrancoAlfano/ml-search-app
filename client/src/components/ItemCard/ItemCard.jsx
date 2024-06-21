@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTruck } from '@fortawesome/free-solid-svg-icons';
 import { formatCurrency } from '../../utils/formatCurrency';
 import ItemImage from '../ItemImage/ItemImage';
-import './ItemCard.scss';
+import './item-card.scss';
 
 const ItemCard = ({ item }) => {
   return (

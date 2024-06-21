@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import './ItemImage.scss';
+import './item-image.scss';
 
 const ItemImage = ({ src, alt, size }) => {
   const sizes = {
