@@ -1,5 +1,6 @@
+'use client';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import ItemCard from '../../components/ItemCard/ItemCard';
 
@@ -7,8 +8,8 @@ const SearchResults = () => {
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const router = useRouter();
-  const { search } = router.query;
+  const searchParams = useSearchParams();
+  const search = searchParams.get('search');
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -39,6 +40,14 @@ const SearchResults = () => {
           <p>Cargando...</p>
         ) : error ? (
           <p className="text-red-500">Error: {error}</p>
+        ) : results.length === 0 ? (
+          <div>
+            <p>No hay publicaciones que coincidan con tu búsqueda</p>
+            <ul>
+              <li>Revisá la ortografía de la palabra.</li>
+              <li>Utilizá palabras más genéricas o menos palabras.</li>
+            </ul>
+          </div>
         ) : (
           <ul>
             {results.map(item => (
