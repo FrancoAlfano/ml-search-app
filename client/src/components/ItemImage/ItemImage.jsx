@@ -11,7 +11,7 @@ const ItemImage = ({ src, alt, size }) => {
 
   return (
     <Image
-      className="rounded item-image"
+      className={size=='large' ? "item-image-large" : "item-image"}
       src={src}
       alt={alt}
       width={width}
