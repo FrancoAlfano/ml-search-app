@@ -1,6 +1,5 @@
 .item-card {
   display: flex;
-  align-items: center;
   padding: 16px 0;
   flex-wrap: nowrap;
   margin-right: 16px;
@@ -8,6 +7,7 @@
 
 .item-location {
   font-size: 12px;
+  margin-top: 32px;
 }
 
 .image-container {
@@ -16,6 +16,7 @@
 }
 
 .item-details {
+  margin-top: 16px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;

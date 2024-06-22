@@ -7,7 +7,7 @@ import './item-card.scss';
 
 const ItemCard = ({ item }) => {
   return (
-    <Link className="item-card flex items-center" href={`/items/${item.id}`}>
+    <Link className="item-card" href={`/items/${item.id}`}>
       <div className="image-container">
         <ItemImage src={item.picture} alt={item.title} size="small" />
       </div>
