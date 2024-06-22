@@ -1,15 +1,19 @@
 .search-form {
   display: flex;
+  flex-grow: 1;
   margin-left: 16px;
-  width: 100%;
-  max-width: 1000px;
 
   input {
     padding: 10px;
-    border-right: none;
+    border: none;
     border-radius: 4px 0 0 4px;
     flex-grow: 1;
     font-size: 18px;
+    outline: none;
+
+    &:focus {
+      box-shadow: 0 0 0 1px #333;
+    }
   }
 
   button {

@@ -3,24 +3,39 @@
   align-items: center;
   justify-content: center;
   background-color: #ffe600;
-  padding: 16px;
+  padding: 8px 0;
 
-  header a {
+  .container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  a {
     color: #333;
     text-decoration: none;
+    display: flex;
+    align-items: center;
   }
 }
 
 @media (max-width: 768px) {
   .header {
-    align-items: flex-start;
-    padding: 16px 8px;
+    padding-right: 16px;
+    padding-left: 16px;
+
+    .container {
+      flex-wrap: nowrap;
+    }
+
+    a {
+      flex-shrink: 1;
+    }
   }
-  .header a {
-    margin-top: 8px;
-  }
+
   .icon {
-    width: fit-content;
-    height: auto;
+    width: auto;
+    height: 32px;
   }
 }

@@ -16,16 +16,18 @@ const Header = () => {
 
   return (
     <header className={styles.header}>
-      <Link href="/" onClick={handleHomeClick}>
-        <Image
-          className={styles.icon}
-          src="/ml-icon.png"
-          alt="Mercado Libre"
-          width={50}
-          height={35}
-        />
-      </Link>
-      <SearchBox ref={searchBoxRef} />
+      <div className={styles.container}>
+        <Link href="/" onClick={handleHomeClick}>
+          <Image
+            className={styles.icon}
+            src="/ml-icon.png"
+            alt="Mercado Libre"
+            width={50}
+            height={35}
+          />
+        </Link>
+        <SearchBox ref={searchBoxRef} />
+      </div>
     </header>
   );
 };
