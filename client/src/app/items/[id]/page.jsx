@@ -9,18 +9,22 @@ import { formatCurrency } from '../../../utils/formatCurrency';
 import LoadingSpinner from '../../../components/Spinner/LoadingSpinner';
 import '../../../styles/product-detail.scss';
 import ErrorMessage from '../../../components/Error/ErrorMessage';
+import Breadcrumb from '../../../components/Breadcrumb/Breadcrumb';
 
 const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [categories, setCategories] = useState([]);
   const { id } = useParams();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`/api/items/${id}`);
         setProduct(response.data.item);
+        setCategories(response.data.categories || []);
       } catch (error) {
         setError('Failed to load product details.');
       } finally {
@@ -47,6 +51,7 @@ const ProductDetail = () => {
 
   return (
     <div className="container">
+      <Breadcrumb categories={categories} />
       <Head>
         <title>{product.title} - Product Details</title>
         <meta name="description" content={product.description} />

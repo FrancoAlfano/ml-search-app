@@ -6,6 +6,7 @@ import ItemCard from '../../components/ItemCard/ItemCard';
 import LoadingSpinner from '../../components/Spinner/LoadingSpinner';
 import ErrorMessage from '../../components/Error/ErrorMessage';
 import styles from '../../styles/search-results.module.scss';
+import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 
 const SearchResults = () => {
   const [results, setResults] = useState([]);
@@ -13,6 +14,7 @@ const SearchResults = () => {
   const [error, setError] = useState(null);
   const searchParams = useSearchParams();
   const search = searchParams.get('search');
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -24,6 +26,7 @@ const SearchResults = () => {
           process.env.NEXT_PUBLIC_ITEMS_URL + `${search}`
         );
         setResults(response.data.items);
+        setCategories(response.data.categories || []);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -67,8 +70,11 @@ const SearchResults = () => {
   };
 
   return (
-    <div className={`container bg-white ${styles.searchResults}`}>
-      <main>{renderContent()}</main>
+    <div className="container">
+      <Breadcrumb categories={categories} />
+      <div className={`bg-white ${styles.searchResults}`}>
+        <main>{renderContent()}</main>
+      </div>
     </div>
   );
 };
