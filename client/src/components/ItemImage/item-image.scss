@@ -20,6 +20,10 @@
   max-height: 680px;
   border-radius: 4px;
   flex: 0 0 auto;
+
+  @media screen and (max-width: 768px) {
+    margin-top: 16px;
+  }
 }
 
 @media screen and (max-width: 768px) {
