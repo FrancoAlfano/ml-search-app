@@ -2,12 +2,12 @@
   display: flex;
   padding: 16px 0;
   flex-wrap: nowrap;
-  margin-right: 16px;
 }
 
 .item-location {
   font-size: 12px;
   margin-top: 32px;
+  margin-right: 64px;
 }
 
 .image-container {
@@ -68,6 +68,7 @@
 
   .item-details {
     font-size: 16px;
+    margin-top: 0px;
 
     .text-lg {
       font-size: 20px;
