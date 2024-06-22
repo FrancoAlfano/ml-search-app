@@ -64,12 +64,16 @@ const ProductDetail = () => {
               {product.condition} - {product.sold_quantity} vendidos
             </p>
             <h1 className="product-title">{product.title}</h1>
-            <p className="text-lg price">
-              {formatCurrency(product.price.amount, product.price.currency)}
-            </p>
-            <Link href={product.permalink} className="buy-button">
-              <button>Comprar</button>
-            </Link>
+            {product.price && (
+              <p className="text-lg price">
+                {formatCurrency(product.price.amount, product.price.currency)}
+              </p>
+            )}
+            {product.permalink && (
+              <Link href={product.permalink} className="buy-button">
+                <button>Comprar</button>
+              </Link>
+            )}
           </div>
         </div>
         <div className="product-description">
