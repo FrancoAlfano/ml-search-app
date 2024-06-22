@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import ItemCard from '../../components/ItemCard/ItemCard';
+import LoadingSpinner from '../../components/Spinner/LoadingSpinner';
+import ErrorMessage from '../../components/Error/ErrorMessage';
+import styles from '../../styles/search-results.module.scss';
 
 const SearchResults = () => {
   const [results, setResults] = useState([]);
@@ -33,31 +36,39 @@ const SearchResults = () => {
     }
   }, [search]);
 
+  const renderContent = () => {
+    if (isLoading) {
+      return <LoadingSpinner />;
+    }
+
+    if (error) {
+      return <ErrorMessage message={`Error: ${error}`} />;
+    }
+
+    if (results.length === 0) {
+      return (
+        <div className={styles.noResults}>
+          <p>No hay publicaciones que coincidan con tu búsqueda</p>
+          <p>Revisá la ortografía de la palabra.</p>
+          <p>Utilizá palabras más genéricas o menos palabras.</p>
+        </div>
+      );
+    }
+
+    return (
+      <ul>
+        {results.map(item => (
+          <li key={item.id}>
+            <ItemCard item={item} />
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
   return (
-    <div className="container bg-white">
-      <main>
-        {isLoading ? (
-          <p>Cargando...</p>
-        ) : error ? (
-          <p className="text-red-500">Error: {error}</p>
-        ) : results.length === 0 ? (
-          <div>
-            <p>No hay publicaciones que coincidan con tu búsqueda</p>
-            <ul>
-              <li>Revisá la ortografía de la palabra.</li>
-              <li>Utilizá palabras más genéricas o menos palabras.</li>
-            </ul>
-          </div>
-        ) : (
-          <ul>
-            {results.map(item => (
-              <li key={item.id}>
-                <ItemCard item={item} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </main>
+    <div className={`container bg-white ${styles.searchResults}`}>
+      <main>{renderContent()}</main>
     </div>
   );
 };

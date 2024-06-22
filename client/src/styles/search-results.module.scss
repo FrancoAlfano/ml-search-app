@@ -1,0 +1,35 @@
+.searchResults {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.loading,
+.error,
+.noResults {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  text-align: center;
+  padding: 20px;
+}
+
+.loading {
+  font-size: 18px;
+  color: #666;
+}
+
+.error {
+  color: #ff0000;
+}
+
+.noResults {
+  flex-direction: column;
+
+  ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-top: 10px;
+  }
+}
