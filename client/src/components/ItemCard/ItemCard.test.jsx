@@ -36,6 +36,10 @@ describe('ItemCard', () => {
     location: 'Test Location'
   };
 
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it('renders item details correctly', () => {
     render(<ItemCard item={mockItem} />);
 

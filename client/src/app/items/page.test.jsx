@@ -43,6 +43,10 @@ describe('SearchResults', () => {
     jest.clearAllMocks();
   });
 
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it('renders loading state initially', async () => {
     const mockSearchParams = new URLSearchParams('?search=test');
     require('next/navigation').useSearchParams.mockReturnValue(

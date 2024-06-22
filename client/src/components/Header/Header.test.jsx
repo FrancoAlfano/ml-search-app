@@ -24,6 +24,10 @@ jest.mock('../SearchBox/SearchBox', () => {
 });
 
 describe('Header', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it('renders the header with logo and SearchBox', () => {
     render(<Header />);
 

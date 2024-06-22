@@ -17,6 +17,10 @@ jest.mock('next/image', () => ({
 }));
 
 describe('ItemImage', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it('renders small item image with correct attributes', () => {
     render(
       <ItemImage src="/test-small.jpg" alt="Test Small Image" size="small" />

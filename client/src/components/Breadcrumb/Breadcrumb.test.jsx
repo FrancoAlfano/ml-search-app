@@ -29,6 +29,10 @@ describe('Breadcrumb', () => {
     });
   });
 
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it('renders categories with correct links', () => {
     const categories = ['Electronics', 'Laptops', 'Gaming Laptops'];
     renderWithSearchContext(<Breadcrumb categories={categories} />);

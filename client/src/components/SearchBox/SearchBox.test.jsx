@@ -42,6 +42,10 @@ describe('SearchBox', () => {
     });
   });
 
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   it('renders the search box with input and button', () => {
     renderWithSearchContext(<SearchBox />);
     expect(
