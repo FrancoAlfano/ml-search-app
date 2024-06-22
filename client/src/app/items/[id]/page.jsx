@@ -1,12 +1,14 @@
 'use client';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useParams } from 'next/navigation';
+import axios from 'axios';
+import Link from 'next/link';
+import Head from 'next/head';
 import ItemImage from '../../../components/ItemImage/ItemImage';
 import { formatCurrency } from '../../../utils/formatCurrency';
-import Head from 'next/head';
+import LoadingSpinner from '../../../components/Spinner/LoadingSpinner';
 import '../../../styles/product-detail.scss';
-import Link from 'next/link';
+import ErrorMessage from '../../../components/Error/ErrorMessage';
 
 const ProductDetail = () => {
   const [product, setProduct] = useState(null);
@@ -32,15 +34,15 @@ const ProductDetail = () => {
   }, [id]);
 
   if (loading) {
-    return <p>Cargando...</p>;
+    return <LoadingSpinner />;
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <ErrorMessage message={error} />;
   }
 
   if (!product) {
-    return <p>No product found.</p>;
+    return <ErrorMessage message="No product found." />;
   }
 
   return (
