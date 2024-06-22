@@ -61,6 +61,18 @@ router.get('/:id', validateParam, async (req, res) => {
     const item = itemResponse.data;
     const description = descriptionResponse.data;
 
+    let categories = [];
+    if (item.category_id) {
+      try {
+        const categoryResponse = await axios.get(
+          `${API_BASE_URL}/categories/${item.category_id}`
+        );
+        categories = categoryResponse.data.path_from_root.map(cat => cat.name);
+      } catch (categoryError) {
+        console.error('Error fetching category:', categoryError);
+      }
+    }
+
     const soldQuantity =
       item.sold_quantity !== undefined ? item.sold_quantity : 0;
     const condition = item.condition === 'new' ? 'Nuevo' : 'Usado';
@@ -70,6 +82,7 @@ router.get('/:id', validateParam, async (req, res) => {
         name: '',
         lastname: ''
       },
+      categories,
       item: {
         id: item.id,
         title: item.title,
