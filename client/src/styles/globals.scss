@@ -12,6 +12,7 @@
 .bg-white {
   background-color: #fff;
   margin-top: 16px;
+  border-radius: 4px;
 
   @media screen and (max-width: 768px) {
     margin-left: 16px;
@@ -53,7 +54,7 @@ li {
 
   @media screen and (max-width: 768px) {
     margin-left: 16px;
-    margin-right: 0;
+    margin-right: 16px;
   }
 }
 

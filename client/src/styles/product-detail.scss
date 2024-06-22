@@ -101,6 +101,10 @@
 
     .text-gray-500 {
       color: #6c757d;
+
+      @media (max-width: 767px) {
+        max-width: auto;
+      }
     }
   }
 }
