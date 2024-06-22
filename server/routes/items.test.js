@@ -1,12 +1,9 @@
 import request from 'supertest';
 import express from 'express';
-import router from './items.js';
-import axios from 'axios';
+import router from '../routes/items';
+import * as itemsController from '../controllers/itemsController';
 
-jest.mock('axios');
-jest.mock('dotenv', () => ({
-  config: jest.fn()
-}));
+jest.mock('../controllers/itemsController');
 
 const app = express();
 app.use(router);
@@ -14,46 +11,38 @@ app.use(router);
 describe('Router Tests', () => {
   beforeEach(() => {
     jest.resetAllMocks();
-    process.env.API_BASE_URL = 'http://api.example.com';
-    process.env.ITEMS_SEARCH_PATH = '/search?q=';
   });
 
   describe('GET /', () => {
     it('should return search results', async () => {
-      const mockResponse = {
-        data: {
-          results: [
-            {
-              id: '1',
-              title: 'Test Item',
-              currency_id: 'USD',
-              price: 100,
-              thumbnail: 'http://example.com/image.jpg',
-              condition: 'new',
-              shipping: { free_shipping: true },
-              location: {
-                city: { name: 'Test City' },
-                state: { name: 'Test State' }
-              }
-            }
-          ],
-          filters: [
-            {
-              id: 'category',
-              values: [
-                {
-                  path_from_root: [
-                    { name: 'Category 1' },
-                    { name: 'Category 2' }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+      const mockSearchResults = {
+        categories: ['Category 1', 'Category 2'],
+        items: [
+          {
+            id: '1',
+            title: 'Test Item',
+            price: {
+              currency: 'USD',
+              amount: 100,
+              decimals: 10
+            },
+            picture: 'http://example.com/image.jpg',
+            condition: 'new',
+            free_shipping: true,
+            location: 'Test City, Test State'
+          }
+        ]
       };
 
-      axios.get.mockResolvedValue(mockResponse);
+      itemsController.searchItems.mockImplementation((req, res) => {
+        res.json({
+          author: {
+            name: '',
+            lastname: ''
+          },
+          ...mockSearchResults
+        });
+      });
 
       const response = await request(app).get('/?q=test');
 
@@ -65,7 +54,9 @@ describe('Router Tests', () => {
     });
 
     it('should handle errors', async () => {
-      axios.get.mockRejectedValue(new Error('API Error'));
+      itemsController.searchItems.mockImplementation((req, res) => {
+        res.status(500).json({ error: 'An error occurred' });
+      });
 
       const response = await request(app).get('/?q=test');
 
@@ -76,39 +67,33 @@ describe('Router Tests', () => {
 
   describe('GET /:id', () => {
     it('should return item details', async () => {
-      const mockItemResponse = {
-        data: {
+      const mockItemDetails = {
+        categories: ['Category 1', 'Category 2'],
+        item: {
           id: '1',
           title: 'Test Item',
-          currency_id: 'USD',
-          price: 100,
-          pictures: [{ secure_url: 'http://example.com/image.jpg' }],
-          condition: 'new',
-          shipping: { free_shipping: true },
+          price: {
+            currency: 'USD',
+            amount: 100,
+            decimals: 0
+          },
+          picture: 'http://example.com/image.jpg',
+          condition: 'Nuevo',
+          free_shipping: true,
           sold_quantity: 5,
-          category_id: 'cat1',
+          description: 'Test description',
           permalink: 'http://example.com/item1'
         }
       };
 
-      const mockDescriptionResponse = {
-        data: {
-          plain_text: 'Test description'
-        }
-      };
-
-      const mockCategoryResponse = {
-        data: {
-          path_from_root: [{ name: 'Category 1' }, { name: 'Category 2' }]
-        }
-      };
-
-      axios.get.mockImplementation(url => {
-        if (url.includes('/description'))
-          return Promise.resolve(mockDescriptionResponse);
-        if (url.includes('/categories'))
-          return Promise.resolve(mockCategoryResponse);
-        return Promise.resolve(mockItemResponse);
+      itemsController.getItemDetails.mockImplementation((req, res) => {
+        res.json({
+          author: {
+            name: '',
+            lastname: ''
+          },
+          ...mockItemDetails
+        });
       });
 
       const response = await request(app).get('/1');
@@ -121,7 +106,9 @@ describe('Router Tests', () => {
     });
 
     it('should handle errors', async () => {
-      axios.get.mockRejectedValue(new Error('API Error'));
+      itemsController.getItemDetails.mockImplementation((req, res) => {
+        res.status(500).json({ error: 'An error occurred' });
+      });
 
       const response = await request(app).get('/1');
 
