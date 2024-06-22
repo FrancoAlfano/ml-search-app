@@ -61,6 +61,10 @@ router.get('/:id', validateParam, async (req, res) => {
     const item = itemResponse.data;
     const description = descriptionResponse.data;
 
+    const soldQuantity =
+      item.sold_quantity !== undefined ? item.sold_quantity : 0;
+    const condition = item.condition === 'new' ? 'Nuevo' : 'Usado';
+
     res.json({
       author: {
         name: '',
@@ -75,10 +79,11 @@ router.get('/:id', validateParam, async (req, res) => {
           decimals: 0
         },
         picture: item.pictures[0].secure_url,
-        condition: item.condition,
+        condition: condition,
         free_shipping: item.shipping.free_shipping,
-        sold_quantity: item.sold_quantity,
-        description: description.plain_text
+        sold_quantity: soldQuantity,
+        description: description.plain_text,
+        permalink: item.permalink
       }
     });
   } catch (error) {

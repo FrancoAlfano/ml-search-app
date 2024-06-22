@@ -1,9 +1,10 @@
 .item-card {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #ddd;
   padding: 16px 0;
   flex-wrap: nowrap;
+  margin-left: 16px;
+  margin-right: 16px;
 }
 
 .item-location {
@@ -44,7 +45,7 @@
   width: 25px;
   height: 25px;
   margin-left: 0.5rem;
-  background-color: #00A650;
+  background-color: #00a650;
   border-radius: 50%;
 
   .svg-inline--fa {

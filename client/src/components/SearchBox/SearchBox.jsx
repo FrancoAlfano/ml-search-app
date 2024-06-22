@@ -35,5 +35,6 @@ const SearchBox = forwardRef((props, ref) => {
   );
 });
 
+SearchBox.displayName = 'SearchBox';
 
 export default SearchBox;
