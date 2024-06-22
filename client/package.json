@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --fix",
-    "format": "prettier --write 'src/pages/**/*.{js,jsx}' 'src/components/**/*.{js,jsx}' 'src/app/**/*.{js,jsx}'"
+    "format": "prettier --write 'src/components/**/*.{js,jsx,scss}' 'src/app/**/*.{js,jsx,scss}' 'src/styles/**/*.scss'"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",

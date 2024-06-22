@@ -34,8 +34,8 @@ const SearchResults = () => {
   }, [search]);
 
   return (
-    <div className="container mx-auto p-4">
-      <main className="bg-white p-4 rounded shadow">
+    <div className="container bg-white">
+      <main>
         {isLoading ? (
           <p>Cargando...</p>
         ) : error ? (

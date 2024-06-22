@@ -3,17 +3,22 @@
 @tailwind utilities;
 
 .container {
-  display: grid;
   max-width: 1100px;
+  width: fit-content;
   margin: 0 auto;
   align-items: center;
+}
+
+.bg-white {
+  background-color: #fff;
+  margin-top: 16px;
 }
 
 body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
 }
 
 ul {
@@ -23,10 +28,30 @@ ul {
 
 li {
   background-color: #fff;
+  position: relative;
+  margin-left: 16px;
+  margin-right: 16px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background-color: #ddd;
+  }
+
+  &:last-child::after {
+    display: none;
+  }
+}
+
+li > * {
   transition: transform 0.2s ease-in-out;
 }
 
-li:hover {
+li:hover > * {
   transform: translateX(8px);
 }
 
@@ -38,4 +63,3 @@ a {
 a:hover {
   text-decoration: underline;
 }
-

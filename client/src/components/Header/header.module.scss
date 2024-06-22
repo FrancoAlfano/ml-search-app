@@ -1,27 +1,26 @@
 .header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #FFE600;
-    padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffe600;
+  padding: 16px;
 
-    header a {
-      color: #333;
-      text-decoration: none;
-    }
+  header a {
+    color: #333;
+    text-decoration: none;
   }
+}
 
-  @media (max-width: 768px) {
-    .header {
-
-      align-items: flex-start;
-      padding: 16px 8px;
-    }
-    .header a {
-      margin-top: 8px;
-    }
-    .icon {
-      width: fit-content;
-      height: auto;
-    }
+@media (max-width: 768px) {
+  .header {
+    align-items: flex-start;
+    padding: 16px 8px;
   }
+  .header a {
+    margin-top: 8px;
+  }
+  .icon {
+    width: fit-content;
+    height: auto;
+  }
+}

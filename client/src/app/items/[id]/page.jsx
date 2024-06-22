@@ -6,6 +6,7 @@ import ItemImage from '../../../components/ItemImage/ItemImage';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import Head from 'next/head';
 import '../../../styles/product-detail.scss';
+import Link from 'next/link';
 
 const ProductDetail = () => {
   const [product, setProduct] = useState(null);
@@ -43,25 +44,29 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container">
       <Head>
         <title>{product.title} - Product Details</title>
         <meta name="description" content={product.description} />
       </Head>
-      <div className="product-detail bg-white p-4 rounded shadow">
-        <div className="product-main flex">
+      <div className="product-detail bg-white rounded shadow">
+        <div className="product-main">
           <ItemImage src={product.picture} alt={product.title} size="large" />
-          <div className="product-info ml-4">
-            <p className="text-base">{product.condition}</p>
-            <h1 className="text-2xl font-bold">{product.title}</h1>
+          <div className="product-info">
+            <p className="text-base">
+              {product.condition} - {product.sold_quantity} vendidos
+            </p>
+            <h1 className="product-title">{product.title}</h1>
             <p className="text-lg price">
               {formatCurrency(product.price.amount, product.price.currency)}
             </p>
-            <button className="buy-button">Comprar</button>
+            <Link href={product.permalink} className="buy-button">
+              <button>Comprar</button>
+            </Link>
           </div>
         </div>
-        <div className="product-description mt-4">
-          <h2 className="text-xl font-bold">Descripción del producto</h2>
+        <div className="product-description">
+          <h2 className="text-xl">Descripción del producto</h2>
           <p className="text-gray-500">{product.description}</p>
         </div>
       </div>
