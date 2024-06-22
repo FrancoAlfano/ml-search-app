@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import ItemCard from '../../components/ItemCard/ItemCard';
@@ -8,7 +8,7 @@ import ErrorMessage from '../../components/Error/ErrorMessage';
 import styles from '../../styles/search-results.module.scss';
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 
-const SearchResults = () => {
+const SearchResultsContent = () => {
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -78,5 +78,11 @@ const SearchResults = () => {
     </div>
   );
 };
+
+const SearchResults = () => (
+  <Suspense fallback={<LoadingSpinner />}>
+    <SearchResultsContent />
+  </Suspense>
+);
 
 export default SearchResults;

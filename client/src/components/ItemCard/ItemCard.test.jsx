@@ -9,7 +9,7 @@ jest.mock('next/link', () => ({
 }));
 
 jest.mock('@fortawesome/react-fontawesome', () => ({
-  FontAwesomeIcon: ({ icon, ...props }) => (
+  FontAwesomeIcon: ({ ...props }) => (
     <svg data-testid="free-shipping-icon" {...props}></svg>
   )
 }));

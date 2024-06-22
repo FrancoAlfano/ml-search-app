@@ -10,16 +10,18 @@ jest.mock('next/link', () => ({
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: props => <img {...props} />
+  default: ({ alt, ...rest }) => <img alt={alt} {...rest} />
 }));
 
-jest.mock('../SearchBox/SearchBox', () =>
-  React.forwardRef((props, ref) => (
+jest.mock('../SearchBox/SearchBox', () => {
+  const SearchBox = React.forwardRef((props, ref) => (
     <div ref={ref} data-testid="search-box">
       SearchBox
     </div>
-  ))
-);
+  ));
+  SearchBox.displayName = 'SearchBox';
+  return SearchBox;
+});
 
 describe('Header', () => {
   it('renders the header with logo and SearchBox', () => {
