@@ -4,7 +4,7 @@
 ### Client
 - Use git clone on the repository, it will create a ml-search-app directory./n
 - Open 2 terminals. Use one to cd into the client/ directory.
-- Create a file called `.env.local` on the root of the client/ and add the following lines to it and save:
+- Create a file called `.env.local`. You can use the provided example file. To do so, run `cp .env.local.example .env.local` on the root of the client/ and populate the variables:
   - `NEXT_PUBLIC_ITEMS_URL='/api/items?q='`
   - `NEXT_PUBLIC_SINGULAR_ITEM_URL='/api/items/'`
 - Use the command `nvm use` to set the correct node version which is v20.9.0, if you do not have it installed you will need to install it to continue.
@@ -14,7 +14,7 @@
 
 ### Server
 - That is all for the client, now go to the second terminar and cd into the server/ directory.
-- In the root of the directory create a file name `.env` and add this two lines to it:
+- In the root of the directory create a file name `.env`. You can use the provided example file. To do so, run `cp .env.example .env` on the root of the client/ and populate the variables with this:
    - `API_BASE_URL=https://api.mercadolibre.com`
    - `ITEMS_SEARCH_PATH=/sites/MLA/search?q=`
 - Use the command `nvm use` to set the correct node version which is v20.9.0, if you do not have it installed you will need to install it to continue.
