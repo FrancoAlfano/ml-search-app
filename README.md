@@ -15,7 +15,7 @@
 - There are tests included in the client/ directory, you may execute them by using the command `npm test`.
 
 ### Server
-- That is all for the client, now go to the second terminar and cd into the server/ directory.
+- That is all for the client, now go to the second terminal and cd into the server/ directory.
 - In the root of the directory create a file name `.env`. You can use the provided example file.
 - To do so, run `cp .env.example .env` on the root of the client/ and populate the variables with this:
    - `API_BASE_URL=https://api.mercadolibre.com`
