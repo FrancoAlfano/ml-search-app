@@ -1,4 +1,6 @@
 .product-detail {
+  margin-bottom: 16px;
+
   .product-main {
     display: flex;
     margin-left: 32px;
@@ -101,6 +103,7 @@
 
     .text-gray-500 {
       color: #6c757d;
+      word-wrap: break-word;
 
       @media (max-width: 767px) {
         max-width: auto;
