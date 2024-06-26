@@ -28,12 +28,12 @@ body {
   background-color: #eeeeee;
 }
 
-ul {
+ul.global-list {
   list-style-type: none;
   padding: 0;
 }
 
-li {
+li.global-item {
   background-color: #fff;
   position: relative;
   margin-left: 16px;
@@ -57,23 +57,22 @@ li {
     margin-left: 16px;
     margin-right: 16px;
   }
+  > * {
+    transition: transform 0.2s ease-in-out;
+  }
+
+  &:hover > * {
+    transform: translateX(8px);
+  }
 }
 
-li > * {
-  transition: transform 0.2s ease-in-out;
-}
-
-li:hover > * {
-  transform: translateX(8px);
-}
-
-a {
+a.global-link {
   text-decoration: none;
   color: inherit;
-}
 
-a:hover {
-  text-decoration: underline;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .loading-spinner {

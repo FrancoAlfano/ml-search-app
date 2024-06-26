@@ -1,0 +1,50 @@
+.pagination {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  padding-top: 32px;
+  padding-bottom: 32px;
+  background-color: #eeeeee;
+  color: gray;
+
+  ul {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    align-items: center;
+
+    li {
+      margin: 0 5px;
+      transform: none;
+
+      &.active button {
+        font-weight: bold;
+        color: black;
+        background-color: white;
+        border-width: 2px;
+        border-color: #3483fa;
+        border-radius: 4px;
+
+        &:hover {
+          background-color: #d4deec;
+        }
+      }
+
+      &.ellipsis {
+        background-color: #eeeeee;
+        padding: 5px;
+      }
+    }
+
+    button {
+      padding: 5px 10px;
+      border-radius: 4px;
+      background-color: #eeeeee;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #d4deec;
+      }
+    }
+  }
+}

@@ -1,10 +1,11 @@
 'use client';
 import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import axios from 'axios';
 import ItemCard from '../../components/ItemCard/ItemCard';
 import LoadingSpinner from '../../components/Spinner/LoadingSpinner';
 import ErrorMessage from '../../components/Error/ErrorMessage';
+import Pagination from '../../components/Pagination/Pagination';
 import styles from '../../styles/search-results.module.scss';
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 
@@ -12,9 +13,13 @@ const SearchResultsContent = () => {
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const searchParams = useSearchParams();
-  const search = searchParams.get('search');
   const [categories, setCategories] = useState([]);
+  const [pagination, setPagination] = useState({});
+
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const search = searchParams.get('search');
+  const page = searchParams.get('page') || '1';
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -23,10 +28,15 @@ const SearchResultsContent = () => {
 
       try {
         const response = await axios.get(
-          process.env.NEXT_PUBLIC_ITEMS_URL + `${search}`
+          `${process.env.NEXT_PUBLIC_ITEMS_URL}${search}&page=${page}`
         );
-        setResults(response.data.items);
-        setCategories(response.data.categories || []);
+        if (response.data.error) {
+          setError(response.data.error);
+        } else {
+          setResults(response.data.items);
+          setCategories(response.data.categories || []);
+          setPagination(response.data.pagination);
+        }
       } catch (err) {
         setError(err.message);
       } finally {
@@ -37,7 +47,11 @@ const SearchResultsContent = () => {
     if (search) {
       fetchResults();
     }
-  }, [search]);
+  }, [search, page]);
+
+  const handlePageChange = newPage => {
+    router.push(`/items?search=${search}&page=${newPage}`);
+  };
 
   const renderContent = () => {
     if (isLoading) {
@@ -59,13 +73,22 @@ const SearchResultsContent = () => {
     }
 
     return (
-      <ul>
-        {results.map(item => (
-          <li key={item.id}>
-            <ItemCard item={item} />
-          </li>
-        ))}
-      </ul>
+      <>
+        <ul className="global-list">
+          {results.map(item => (
+            <li className="global-item" key={item.id}>
+              <ItemCard item={item} />
+            </li>
+          ))}
+        </ul>
+        {pagination.totalPages > 1 && (
+          <Pagination
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
+      </>
     );
   };
 
