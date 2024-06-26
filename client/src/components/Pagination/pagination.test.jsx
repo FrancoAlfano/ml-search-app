@@ -1,11 +1,13 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, screen, within } from '@testing-library/react';
 import Pagination from './Pagination';
 
 jest.mock('./pagination.module.scss', () => ({
   pagination: 'pagination',
   active: 'active',
   ellipsis: 'ellipsis',
+  desktopVisible: 'desktopVisible',
+  mobileVisible: 'mobileVisible'
 }));
 
 describe('Pagination Component', () => {
@@ -17,101 +19,200 @@ describe('Pagination Component', () => {
 
   it('renders pagination component', () => {
     const { container } = render(
-      <Pagination currentPage={1} totalPages={10} onPageChange={mockOnPageChange} />
+      <Pagination
+        currentPage={1}
+        totalPages={10}
+        onPageChange={mockOnPageChange}
+      />
     );
     expect(container.firstChild).toHaveClass('pagination');
   });
 
-  it('displays the current page as active', () => {
-    const { getByText } = render(
-      <Pagination currentPage={5} totalPages={10} onPageChange={mockOnPageChange} />
+  it('displays the current page as active in desktop view', () => {
+    render(
+      <Pagination
+        currentPage={5}
+        totalPages={10}
+        onPageChange={mockOnPageChange}
+      />
     );
-    expect(getByText('5').closest('li')).toHaveClass('active');
+    const desktopView = screen
+      .getByRole('navigation')
+      .querySelector('.desktopVisible');
+    const activeButton = within(desktopView).getByText('5').closest('li');
+    expect(activeButton).toHaveClass('active');
   });
 
   it('calls onPageChange when a page number is clicked', () => {
-    const { getByText } = render(
-      <Pagination currentPage={1} totalPages={10} onPageChange={mockOnPageChange} />
+    render(
+      <Pagination
+        currentPage={1}
+        totalPages={10}
+        onPageChange={mockOnPageChange}
+      />
     );
-    fireEvent.click(getByText('2'));
+    const desktopView = screen
+      .getByRole('navigation')
+      .querySelector('.desktopVisible');
+    fireEvent.click(within(desktopView).getByText('2'));
     expect(mockOnPageChange).toHaveBeenCalledWith(2);
   });
 
   it('displays "Anterior" button when not on the first page', () => {
-    const { getByText } = render(
-      <Pagination currentPage={2} totalPages={10} onPageChange={mockOnPageChange} />
+    render(
+      <Pagination
+        currentPage={2}
+        totalPages={10}
+        onPageChange={mockOnPageChange}
+      />
     );
-    expect(getByText('< Anterior')).toBeInTheDocument();
+    expect(screen.getByText('< Anterior')).toBeInTheDocument();
   });
 
   it('does not display "Anterior" button on the first page', () => {
-    const { queryByText } = render(
-      <Pagination currentPage={1} totalPages={10} onPageChange={mockOnPageChange} />
+    render(
+      <Pagination
+        currentPage={1}
+        totalPages={10}
+        onPageChange={mockOnPageChange}
+      />
     );
-    expect(queryByText('< Anterior')).not.toBeInTheDocument();
+    expect(screen.queryByText('< Anterior')).not.toBeInTheDocument();
   });
 
   it('displays "Siguiente" button when not on the last page', () => {
-    const { getByText } = render(
-      <Pagination currentPage={9} totalPages={10} onPageChange={mockOnPageChange} />
+    render(
+      <Pagination
+        currentPage={9}
+        totalPages={10}
+        onPageChange={mockOnPageChange}
+      />
     );
-    expect(getByText('Siguiente >')).toBeInTheDocument();
+    expect(screen.getByText('Siguiente >')).toBeInTheDocument();
   });
 
   it('does not display "Siguiente" button on the last page', () => {
-    const { queryByText } = render(
-      <Pagination currentPage={10} totalPages={10} onPageChange={mockOnPageChange} />
+    render(
+      <Pagination
+        currentPage={10}
+        totalPages={10}
+        onPageChange={mockOnPageChange}
+      />
     );
-    expect(queryByText('Siguiente >')).not.toBeInTheDocument();
+    expect(screen.queryByText('Siguiente >')).not.toBeInTheDocument();
   });
 
   it('calls onPageChange with previous page when "Anterior" is clicked', () => {
-    const { getByText } = render(
-      <Pagination currentPage={5} totalPages={10} onPageChange={mockOnPageChange} />
+    render(
+      <Pagination
+        currentPage={5}
+        totalPages={10}
+        onPageChange={mockOnPageChange}
+      />
     );
-    fireEvent.click(getByText('< Anterior'));
+    fireEvent.click(screen.getByText('< Anterior'));
     expect(mockOnPageChange).toHaveBeenCalledWith(4);
   });
 
   it('calls onPageChange with next page when "Siguiente" is clicked', () => {
-    const { getByText } = render(
-      <Pagination currentPage={5} totalPages={10} onPageChange={mockOnPageChange} />
+    render(
+      <Pagination
+        currentPage={5}
+        totalPages={10}
+        onPageChange={mockOnPageChange}
+      />
     );
-    fireEvent.click(getByText('Siguiente >'));
+    fireEvent.click(screen.getByText('Siguiente >'));
     expect(mockOnPageChange).toHaveBeenCalledWith(6);
   });
 
-  it('always displays first and last page numbers', () => {
-    const { getByText } = render(
-      <Pagination currentPage={5} totalPages={10} onPageChange={mockOnPageChange} />
+  it('always displays first and last page numbers for many pages', () => {
+    render(
+      <Pagination
+        currentPage={5}
+        totalPages={20}
+        onPageChange={mockOnPageChange}
+      />
     );
-    expect(getByText('1')).toBeInTheDocument();
-    expect(getByText('10')).toBeInTheDocument();
+    const desktopView = screen
+      .getByRole('navigation')
+      .querySelector('.desktopVisible');
+    expect(within(desktopView).getByText('1')).toBeInTheDocument();
+    expect(within(desktopView).getByText('20')).toBeInTheDocument();
   });
 
   it('displays ellipsis when there are many pages', () => {
-    const { getAllByText } = render(
-      <Pagination currentPage={5} totalPages={20} onPageChange={mockOnPageChange} />
+    render(
+      <Pagination
+        currentPage={10}
+        totalPages={20}
+        onPageChange={mockOnPageChange}
+      />
     );
-    const ellipses = getAllByText('...');
-    expect(ellipses.length).toBeGreaterThan(0);
+    const ellipses = screen.getAllByText('...');
+    expect(ellipses.length).toBe(2);
   });
 
   it('handles single page scenario', () => {
-    const { queryByText } = render(
-      <Pagination currentPage={1} totalPages={1} onPageChange={mockOnPageChange} />
+    render(
+      <Pagination
+        currentPage={1}
+        totalPages={1}
+        onPageChange={mockOnPageChange}
+      />
     );
-    expect(queryByText('1')).toBeInTheDocument();
-    expect(queryByText('< Anterior')).not.toBeInTheDocument();
-    expect(queryByText('Siguiente >')).not.toBeInTheDocument();
+    const desktopView = screen
+      .getByRole('navigation')
+      .querySelector('.desktopVisible');
+    expect(within(desktopView).getByText('1')).toBeInTheDocument();
+    expect(screen.queryByText('< Anterior')).not.toBeInTheDocument();
+    expect(screen.queryByText('Siguiente >')).not.toBeInTheDocument();
   });
 
   it('displays a range of pages around the current page', () => {
-    const { getByText } = render(
-      <Pagination currentPage={5} totalPages={10} onPageChange={mockOnPageChange} />
+    render(
+      <Pagination
+        currentPage={5}
+        totalPages={10}
+        onPageChange={mockOnPageChange}
+      />
     );
-    [3, 4, 5, 6, 7].forEach(num => {
-      expect(getByText(num.toString())).toBeInTheDocument();
+    const desktopView = screen
+      .getByRole('navigation')
+      .querySelector('.desktopVisible');
+    [2, 3, 4, 5, 6, 7, 8].forEach(num => {
+      expect(within(desktopView).getByText(num.toString())).toBeInTheDocument();
     });
+  });
+
+  it('displays mobile view with only current page', () => {
+    render(
+      <Pagination
+        currentPage={5}
+        totalPages={10}
+        onPageChange={mockOnPageChange}
+      />
+    );
+    const mobileView = screen
+      .getByRole('navigation')
+      .querySelector('.mobileVisible');
+    expect(mobileView).toHaveTextContent('5');
+    expect(mobileView).toHaveClass('active');
+  });
+
+  it('displays desktop view with page range', () => {
+    render(
+      <Pagination
+        currentPage={5}
+        totalPages={10}
+        onPageChange={mockOnPageChange}
+      />
+    );
+    const desktopView = screen
+      .getByRole('navigation')
+      .querySelector('.desktopVisible');
+    expect(desktopView).toBeInTheDocument();
+    expect(within(desktopView).getByText('2')).toBeInTheDocument();
+    expect(within(desktopView).getByText('8')).toBeInTheDocument();
   });
 });

@@ -47,4 +47,27 @@
       }
     }
   }
+
+  .mobileVisible {
+    display: none;
+  }
+
+  .desktopVisible {
+    display: flex;
+  }
+
+  @media (max-width: 768px) {
+    .desktopVisible {
+      display: none;
+    }
+
+    .mobileVisible {
+      display: block;
+    }
+
+    ul {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 }
