@@ -4,7 +4,8 @@ import axios from 'axios';
 import SearchResults from './page.jsx';
 
 jest.mock('next/navigation', () => ({
-  useSearchParams: jest.fn()
+  useSearchParams: jest.fn(),
+  useRouter: jest.fn(() => ({ push: jest.fn() }))
 }));
 
 jest.mock('axios');
@@ -38,6 +39,18 @@ jest.mock(
     }
 );
 
+jest.mock(
+  '../../components/Pagination/Pagination',
+  () =>
+    function MockPagination({ currentPage, totalPages }) {
+      return (
+        <div data-testid="pagination">
+          Pagination: {currentPage} of {totalPages}
+        </div>
+      );
+    }
+);
+
 describe('SearchResults', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -48,7 +61,7 @@ describe('SearchResults', () => {
   });
 
   it('renders loading state initially', async () => {
-    const mockSearchParams = new URLSearchParams('?search=test');
+    const mockSearchParams = new URLSearchParams('?search=test&page=1');
     require('next/navigation').useSearchParams.mockReturnValue(
       mockSearchParams
     );
@@ -57,7 +70,14 @@ describe('SearchResults', () => {
       () =>
         new Promise(resolve =>
           setTimeout(
-            () => resolve({ data: { items: [], categories: [] } }),
+            () =>
+              resolve({
+                data: {
+                  items: [],
+                  categories: [],
+                  pagination: { currentPage: 1, totalPages: 0 }
+                }
+              }),
             100
           )
         )
@@ -75,7 +95,7 @@ describe('SearchResults', () => {
   });
 
   it('renders error message when API call fails', async () => {
-    const mockSearchParams = new URLSearchParams('?search=test');
+    const mockSearchParams = new URLSearchParams('?search=test&page=1');
     require('next/navigation').useSearchParams.mockReturnValue(
       mockSearchParams
     );
@@ -95,12 +115,18 @@ describe('SearchResults', () => {
   });
 
   it('renders no results message when API returns empty array', async () => {
-    const mockSearchParams = new URLSearchParams('?search=test');
+    const mockSearchParams = new URLSearchParams('?search=test&page=1');
     require('next/navigation').useSearchParams.mockReturnValue(
       mockSearchParams
     );
 
-    axios.get.mockResolvedValueOnce({ data: { items: [], categories: [] } });
+    axios.get.mockResolvedValueOnce({
+      data: {
+        items: [],
+        categories: [],
+        pagination: { currentPage: 1, totalPages: 0 }
+      }
+    });
 
     await act(async () => {
       render(<SearchResults />);
@@ -114,7 +140,7 @@ describe('SearchResults', () => {
   });
 
   it('renders item cards when API returns results', async () => {
-    const mockSearchParams = new URLSearchParams('?search=test');
+    const mockSearchParams = new URLSearchParams('?search=test&page=1');
     require('next/navigation').useSearchParams.mockReturnValue(
       mockSearchParams
     );
@@ -124,7 +150,11 @@ describe('SearchResults', () => {
       { id: '2', title: 'Item 2' }
     ];
     axios.get.mockResolvedValueOnce({
-      data: { items: mockItems, categories: ['Category 1'] }
+      data: {
+        items: mockItems,
+        categories: ['Category 1'],
+        pagination: { currentPage: 1, totalPages: 1 }
+      }
     });
 
     await act(async () => {
@@ -139,13 +169,17 @@ describe('SearchResults', () => {
   });
 
   it('renders breadcrumb with correct categories', async () => {
-    const mockSearchParams = new URLSearchParams('?search=test');
+    const mockSearchParams = new URLSearchParams('?search=test&page=1');
     require('next/navigation').useSearchParams.mockReturnValue(
       mockSearchParams
     );
 
     axios.get.mockResolvedValueOnce({
-      data: { items: [], categories: ['Category 1', 'Category 2'] }
+      data: {
+        items: [],
+        categories: ['Category 1', 'Category 2'],
+        pagination: { currentPage: 1, totalPages: 0 }
+      }
     });
 
     await act(async () => {
@@ -168,5 +202,59 @@ describe('SearchResults', () => {
     });
 
     expect(axios.get).not.toHaveBeenCalled();
+  });
+
+  it('renders pagination when there are multiple pages', async () => {
+    const mockSearchParams = new URLSearchParams('?search=test&page=1');
+    require('next/navigation').useSearchParams.mockReturnValue(
+      mockSearchParams
+    );
+
+    const mockItems = [
+      { id: '1', title: 'Item 1' },
+      { id: '2', title: 'Item 2' }
+    ];
+    axios.get.mockResolvedValueOnce({
+      data: {
+        items: mockItems,
+        categories: ['Category 1'],
+        pagination: { currentPage: 1, totalPages: 3 }
+      }
+    });
+
+    await act(async () => {
+      render(<SearchResults />);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('pagination')).toBeInTheDocument();
+      expect(screen.getByTestId('pagination')).toHaveTextContent(
+        'Pagination: 1 of 3'
+      );
+    });
+  });
+
+  it('does not render pagination when there is only one page', async () => {
+    const mockSearchParams = new URLSearchParams('?search=test&page=1');
+    require('next/navigation').useSearchParams.mockReturnValue(
+      mockSearchParams
+    );
+
+    const mockItems = [{ id: '1', title: 'Item 1' }];
+    axios.get.mockResolvedValueOnce({
+      data: {
+        items: mockItems,
+        categories: ['Category 1'],
+        pagination: { currentPage: 1, totalPages: 1 }
+      }
+    });
+
+    await act(async () => {
+      render(<SearchResults />);
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('pagination')).not.toBeInTheDocument();
+    });
   });
 });
